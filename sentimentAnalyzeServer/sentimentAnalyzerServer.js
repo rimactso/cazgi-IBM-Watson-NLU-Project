@@ -10,7 +10,7 @@ function getNLUInstance(){
     let api_url=process.env.API_URL;
     const nluv = require('ibm-watson/natural-language-understanding/v1');
     const {IamAuthenticator}= require('ibm-watson/auth');
-    const nlu = nluv({
+    const nlu = new nluv({
         version:'2020-08-01',
         authenticator: new IamAuthenticator({
             apikey:api_key,
@@ -69,17 +69,36 @@ app.get("/",(req,res)=>{
     res.render('index.html');
   });
 
+
+
 app.get("/url/emotion", (req,res) => {
 
-  nlu = new getNLUInstance();
-  nlu.analyze(analyzeParams).then(analysisResults=>
-    {
-console.log(JSON.stringify(analysisResulsts,null,2));
+  nlu = new getNLUInstance();  
+    
+ console.log(req.query.url); 
 
-    })
-    .catch(err=>{console.log('error',err);
-});
-});
+
+const analyzeParams = {
+  'url': req.query.url,
+    'features': {
+    'categories': {
+      'limit': 3
+    }
+  }
+};
+
+nlu.analyze(analyzeParams)
+  .then(analysisResults => {
+    console.log(JSON.stringify(analysisResults, null, 2));
+  })
+  .catch(err => {
+    console.log('error:', err);
+  });
+
+  //  res.render('index.html');
+  });
+
+
 
 app.get("/url/sentiment", (req,res) => {
     return res.send("url sentiment for "+req.query.url);
