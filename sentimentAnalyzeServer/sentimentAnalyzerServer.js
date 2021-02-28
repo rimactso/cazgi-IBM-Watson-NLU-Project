@@ -22,10 +22,48 @@ function getNLUInstance(){
 
 
 
+
+
 app.use(express.static('client'))
 
 const cors_app = require('cors');
 app.use(cors_app());
+
+app.get("/sfe",(req,res)=>{
+    const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+const { IamAuthenticator } = require('ibm-watson/auth');
+
+    let api_key=process.env.API_KEY;
+    let api_url=process.env.API_URL;
+
+const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
+  version: '2020-08-01',
+  authenticator: new IamAuthenticator({
+    apikey: 'KIov1X1IyOsRKBdJ_8OfGBhliYz6bKfdou81PvuhgOfS',
+  }),
+  serviceUrl: 'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/8343b905-6759-4fd7-a7e6-1776440b48b7',
+});
+
+const analyzeParams = {
+  'url': 'www.ibm.com',
+  'emotions': {
+    'categories': {
+      'limit': 3
+    }
+  }
+};
+
+naturalLanguageUnderstanding.analyze(analyzeParams)
+  .then(analysisResults => {
+    console.log(JSON.stringify(analysisResults, null, 2));
+  })
+  .catch(err => {
+    console.log('error:', err);
+  });
+
+  //  res.render('index.html');
+  });
+
 
 app.get("/",(req,res)=>{
     res.render('index.html');
@@ -33,7 +71,14 @@ app.get("/",(req,res)=>{
 
 app.get("/url/emotion", (req,res) => {
 
-    return res.send({"happy":"90","sad":"10"});
+  nlu = new getNLUInstance();
+  nlu.analyze(analyzeParams).then(analysisResults=>
+    {
+console.log(JSON.stringify(analysisResulsts,null,2));
+
+    })
+    .catch(err=>{console.log('error',err);
+});
 });
 
 app.get("/url/sentiment", (req,res) => {
@@ -41,7 +86,7 @@ app.get("/url/sentiment", (req,res) => {
 });
 
 app.get("/text/emotion", (req,res) => {
-    return res.send({"happy":"10","sad":"90"});
+    return res.send({"happysfesfesfe":"10","sad":"90"});
 });
 
 app.get("/text/sentiment", (req,res) => {
@@ -51,4 +96,6 @@ app.get("/text/sentiment", (req,res) => {
 let server = app.listen(8080, () => {
     console.log('Listening', server.address().port)
 })
+
+
 
