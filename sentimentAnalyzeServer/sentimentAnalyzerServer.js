@@ -51,12 +51,12 @@ const analyzeParams = {
 nlu.analyze(analyzeParams)
   .then(analysisResults => {
     console.log(JSON.stringify(analysisResults, null, 2));
+    res.send(JSON.stringify(analysisResults, null, 2))
   })
   .catch(err => {
     console.log('error:', err);
+    res.send(JSON.stringify(err, null, 2));
   });
-
-  //  res.render('index.html');
   });
 
 
@@ -75,9 +75,11 @@ const analyzeParams = {
 nlu.analyze(analyzeParams)
   .then(analysisResults => {
     console.log(JSON.stringify(analysisResults, null, 2));
+    res.send(JSON.stringify(analysisResults, null, 2))
   })
   .catch(err => {
     console.log('error:', err);
+    res.send(JSON.stringify(err, null, 2));
   });
 
   //  res.render('index.html');
@@ -100,9 +102,11 @@ const analyzeParams = {
 nlu.analyze(analyzeParams)
   .then(analysisResults => {
     console.log(JSON.stringify(analysisResults, null, 2));
+    res.send(JSON.stringify(analysisResults, null, 2));
   })
   .catch(err => {
     console.log('error:', err);
+    res.send(JSON.stringify(err, null, 2));
   });
 
   //  res.render('index.html');
@@ -123,10 +127,12 @@ const analyzeParams = {
 
 nlu.analyze(analyzeParams)
   .then(analysisResults => {
-    console.log(JSON.stringify(analysisResults, null, 2));
+   console.log(JSON.stringify(analysisResults, null, 2));
+    res.send(JSON.stringify(analysisResults, null, 2))
   })
   .catch(err => {
     console.log('error:', err);
+    res.send(err);
   });
 
   //  res.render('index.html');

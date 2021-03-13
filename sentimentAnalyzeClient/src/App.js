@@ -1,3 +1,5 @@
+
+
 import './bootstrap.min.css';
 import './App.css';
 import EmotionTable from './EmotionTable.js';
@@ -10,8 +12,14 @@ class App extends React.Component {
           sentimentOutput:[],
           sentiment:true
         }
-  
-  renderTextArea = ()=>{
+
+    setTitle = ()=>{
+        document.title = "Sentiment Analyzer";
+  }
+
+  setTitle;
+
+    renderTextArea = ()=>{
     document.getElementById("textinput").value = "";
     if(this.state.mode === "url") {
       this.setState({innercomp:<textarea rows="4" cols="50" id="textinput"/>,
@@ -34,6 +42,7 @@ class App extends React.Component {
   }
 
   sendForSentimentAnalysis = () => {
+
     this.setState({sentiment:true});
     let ret = "";
     let url = ".";
@@ -45,19 +54,33 @@ class App extends React.Component {
     }
     ret = axios.get(url);
     ret.then((response)=>{
-
-      //Include code here to check the sentiment and fomrat the data accordingly
-
-      this.setState({sentimentOutput:response.data});
-      let output = response.data;
-      if(response.data === "positive") {
-        output = <div style={{color:"green",fontSize:20}}>{response.data}</div>
-      } else if (response.data === "negative"){
-        output = <div style={{color:"red",fontSize:20}}>{response.data}</div>
+    try{
+     let output = response.data.result.sentiment.document.label;
+      if(output === "positive") {
+        output = <div style={{color:"green",fontSize:20}}>{output}</div>
+      } else if (output === "negative"){
+        output = <div style={{color:"red",fontSize:20}}>{output}</div>
       } else {
-        output = <div style={{color:"yellow",fontSize:20}}>{response.data}</div>
+        output = <div style={{color:"yellow",fontSize:20}}>{output}</div>
       }
       this.setState({sentimentOutput:output});
+
+    } catch (e) {
+          let output = response.data.body;
+          output=output.replace("'","");
+          output=output.replace('"',"");
+           output=output.replace('"',"");
+           output=output.replace('"',"");
+           output=output.replace('"',"");
+           output=output.replace('"',"");
+           output=output.replace('"',"");
+           output=output.replace('"',"");
+ 
+          output=output.replace('{',"");
+          output=output.replace(','," ");
+        output=output.replace('}',"");
+        output =   <div>{output}</div>
+        this.setState({sentimentOutput:output});}
     });
   }
 
@@ -79,6 +102,7 @@ class App extends React.Component {
   
 
   render() {
+      document.title="Sentiment Analyzer";
     return (  
       <div className="App">
       <button className="btn btn-info" onClick={this.renderTextArea}>Text</button>
